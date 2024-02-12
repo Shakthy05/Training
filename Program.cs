@@ -1,2 +1,98 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿// ---------------------------------------------------------------------
+// QueueProgram
+// Create a queue TQueue<T> with array as the underlying data structure
+// ---------------------------------------------------------------------
+namespace QueueProgram;
+internal class Program {
+   private static void Main (string[] args) {
+      TQueue<int> queue = new ();
+      queue.Enqueue (1);
+      queue.Enqueue (2);
+      queue.Enqueue (3);
+      queue.Enqueue (4);
+      queue.Display ();
+      queue.Dequeue ();
+      queue.Dequeue ();
+      queue.Dequeue ();
+      queue.Dequeue ();
+      queue.Display ();
+      queue.Enqueue (8);
+      queue.Enqueue (9);
+      queue.Enqueue (10);
+      queue.Enqueue (11);
+      queue.Enqueue (12);
+      queue.Enqueue (13);
+      queue.Enqueue (14);
+      queue.Enqueue (15);
+      queue.Display ();
+      queue.Dequeue ();
+      queue.Dequeue ();
+      queue.Display ();
+      Console.WriteLine ("Peek:" + queue.Peek ());
+   }
+}
+
+public class TQueue<T> {
+   /// <summary>Constructor of TQueue</summary>
+   public TQueue () => mArray = new T[4];
+
+   /// <summary>Capacity of the queue</summary>
+   public int Capacity => mArray.Length;
+
+   /// <summary>Count of the elements in the array</summary>
+   public int Count => mCount;
+
+   /// <summary>Adds elements to the queue</summary>
+   /// <param name="a">The value of the element to be added</param>
+   public void Enqueue (T a) {
+      if (IsFull) ArrayResize ();
+      mArray[mRear] = a;
+      mRear = (mRear + 1) % Capacity;
+      mCount++;
+   }
+
+   /// <summary>Deletes an element from the queue</summary>
+   /// <returns>Returns the element to be deleted</returns>
+   /// <exception cref="InvalidOperationException"></exception>
+   public T Dequeue () {
+      if (IsEmpty) throw new InvalidOperationException ();
+      T item = mArray[mFront];
+      mCount--;
+      mFront = (mFront + 1) % Capacity;
+      return item;
+   }
+
+   /// <summary>Returns the first element added to the queue</summary>
+   /// <returns>Returns the first element of the queue</returns>
+   /// <exception cref="InvalidOperationException"></exception>
+   public T Peek () {
+      if (IsEmpty) throw new InvalidOperationException ();
+      return mArray[mFront];
+   }
+
+   /// <summary>To check whether the queue is empty</summary>
+   public bool IsEmpty => mCount == 0;
+
+   /// <summary>To check whether the queue is full</summary>
+   public bool IsFull => Capacity == Count;
+
+   /// <summary>Displays the elements of the queue</summary>
+   public void Display () {
+      if (IsEmpty) Console.WriteLine ("Empty queue");
+      else {
+         for (int i = 0; i < mCount; i++) Console.Write (mArray[(mFront + i) % Capacity] + " ");
+         Console.WriteLine ();
+      }
+   }
+
+   /// <summary>Rearranges the elements in the array while resizing the array</summary>
+   public void ArrayResize () {
+      T[] newArray = new T[Capacity * 2];
+      for (int i = 0; i < Count; i++)
+         newArray[i] = mArray[(mFront + i) % Capacity];
+      (mArray, mFront, mRear) = (newArray, 0, Count);
+   }
+
+   int mFront, mRear, mCount;
+   T[] mArray;
+}
