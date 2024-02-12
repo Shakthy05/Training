@@ -7,4 +7,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="TestProject1\**" />
+    <Compile Remove="TestStack\**" />
+    <EmbeddedResource Remove="TestProject1\**" />
+    <EmbeddedResource Remove="TestStack\**" />
+    <None Remove="TestProject1\**" />
+    <None Remove="TestStack\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitconfig" />
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
 </Project>
